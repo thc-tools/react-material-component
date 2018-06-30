@@ -1,36 +1,36 @@
 {
-  "name": "@thc/react-material-component",
-  "version": "0.1.0",
-  "description": "Implementation of Material Components Web for React",
-  "main": "index.js",
-  "scripts": {
-    "pre-release": "standard-version",
-    "pre-release-alpha": "standard-version --prerelease alpha",
-    "pre-release-beta": "standard-version --prerelease beta",
-    "release": "npm publish --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
-    "release-alpha": "npm publish --tag alpha --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
-    "release-beta": "npm publish --tag beta --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thc-tools/react-material-component.git"
-  },
-  "keywords": [
-    "thc",
-    "react",
-    "material",
-    "web",
-    "component"
-  ],
-  "author": "THC-Tools",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/thc-tools/react-material-component/issues"
-  },
-  "homepage": "https://github.com/thc-tools/react-material-component#readme",
-  "devDependencies": {
-    "conventional-github-releaser": "3.1.2",
-    "standard-version": "4.4.0"
-  }
+    "name": "@thc/react-material-component",
+    "version": "0.1.0",
+    "description": "Implementation of Material Components Web for React",
+    "main": "index.js",
+    "scripts": {
+        "pre-release": "standard-version",
+        "pre-release-alpha": "standard-version --prerelease alpha",
+        "pre-release-beta": "standard-version --prerelease beta",
+        "release": "npm publish --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
+        "release-alpha": "npm publish --tag alpha --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
+        "release-beta": "npm publish --tag beta --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thc-tools/react-material-component.git"
+    },
+    "keywords": [
+        "thc",
+        "react",
+        "material",
+        "web",
+        "component"
+    ],
+    "author": "THC-Tools",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/thc-tools/react-material-component/issues"
+    },
+    "homepage": "https://github.com/thc-tools/react-material-component#readme",
+    "devDependencies": {
+        "conventional-github-releaser": "3.1.2",
+        "standard-version": "4.4.0"
+    }
 }
