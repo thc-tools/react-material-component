@@ -31,3 +31,11 @@ const ICON_BASE = "mdc-icon-button";
 export const iconCssClasses = {
     ICON_BASE
 };
+
+const TOGGLE_BASE = "mdc-icon-toggle";
+const TOGGLE_DISABLED = "mdc-icon-toggle--disabled";
+
+export const toggleCssClasses = {
+    TOGGLE_BASE,
+    TOGGLE_DISABLED
+};
