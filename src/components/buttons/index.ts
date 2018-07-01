@@ -1,0 +1,1 @@
+export { THCButton } from "./button";
