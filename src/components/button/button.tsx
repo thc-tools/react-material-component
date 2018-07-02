@@ -23,8 +23,6 @@ export interface THCButtonProps {
      * @default before
      */
     iconPosition?: "before" | "after";
-    /** Label */
-    label: string;
     /**
      * Onclick handler
      */
@@ -72,13 +70,13 @@ export class THCButton extends Component<THCButtonProps> {
             icon,
             iconLib = "material-icons",
             iconPosition = "before",
-            label,
             onClick,
             raised = false,
             unelevated = false,
             outlined = false,
             dense = false,
             theme = {},
+            children,
             ...otherProps
         } = this.props;
 
@@ -106,7 +104,7 @@ export class THCButton extends Component<THCButtonProps> {
         return (
             <button className={buttonClassName} {...otherProps} onClick={onClick}>
                 {icon && iconPosition === "before" && iconComp}
-                {label}
+                {children}
                 {icon && iconPosition === "after" && iconComp}
             </button>
         );
