@@ -37,12 +37,15 @@
         "material-components-web": "0.36.1",
         "react": "16.4.1",
         "react-dom": "16.4.1",
-        "standard-version": "4.4.0"
+        "standard-version": "4.4.0",
+        "ts-loader": "4.4.2",
+        "typescript": "2.9.2"
     },
     "peerDependencies": {
         "material-components-web": "0.36.1",
         "react": "16.4.1",
-        "react-dom": "16.4.1"
+        "react-dom": "16.4.1",
+        "typescript": "2.9.2"
     },
     "dependencies": {
         "@types/classnames": "2.2.4",

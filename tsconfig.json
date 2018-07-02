@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        // Général
+        "lib": ["es2018", "dom"],
+        "jsx": "react",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "es5",
+
+        // Options obligatoires
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "strict": true,
+
+        // Options additionnelles
+        "importHelpers": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "exclude": ["dist", "node_modules", "./src/**/__test__/*"]
+}
