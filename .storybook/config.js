@@ -1,4 +1,5 @@
-import { configure } from "@storybook/react";
+import { configure, addDecorator } from "@storybook/react";
+import { withInfo } from "@storybook/addon-info";
 
 import "material-components-web/dist/material-components-web.css";
 
@@ -7,5 +8,7 @@ const req = require.context("../src/components", true, /.stories.tsx$/);
 function loadStories() {
     req.keys().forEach(filename => req(filename));
 }
+
+addDecorator(withInfo({ inline: true, header: false }));
 
 configure(loadStories, module);
