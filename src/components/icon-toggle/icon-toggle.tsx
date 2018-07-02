@@ -6,29 +6,53 @@ import { MDCIconToggle, MDCIconToggleFoundation } from "@material/icon-toggle";
 // Utils
 import { toggleCssClasses } from "./constants";
 
-/** Props for THCIconToggle component. */
+/**
+ * Props for THCIconToggle component.
+ */
 export interface THCIconToggleProps {
-    /** Icon to display for on state */
+    /**
+     * Icon to display for on state
+     */
     iconOn: string;
-    /** Icon to display for off state */
+    /**
+     * Icon to display for off state
+     */
     iconOff: string;
-    /** Icon library, default to : "material-icons" */
+    /**
+     * Icon library
+     * @default material-icons"
+     */
     iconLib?: string;
-    /** Label for on state */
+    /**
+     * Label for on state
+     */
     labelOn: string;
-    /** Label for off state */
+    /**
+     * Label for off state
+     */
     labelOff: string;
-    /** Onclick handler */
+    /**
+     * Onclick handler
+     */
     onClick: (value: boolean) => void;
-    /** Value of IconToggle */
+    /**
+     * Value of IconToggle
+     */
     value: boolean;
-    /** If is disabled, default to "false" */
+    /**
+     * If is disabled
+     * @default false
+     */
     disabled?: boolean;
-    /** Theme options */
+    /**
+     * Theme options
+     */
     theme?: { toggle?: string; on?: string; off?: string };
 }
 
-/** Simple implementation for MDCIconToggle. */
+/**
+ * Simple implementation for MDCIconToggle.
+ */
 export class THCIconToggle extends Component<THCIconToggleProps> {
     private iconToggleRef: React.RefObject<HTMLElement>;
     private iconToggle?: MDCIconToggle = undefined;

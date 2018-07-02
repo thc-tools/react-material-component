@@ -5,28 +5,49 @@ import classNames from "classnames";
 // Utils
 import { fabCssClasses } from "./constants";
 
-/** Props for THCFab component. */
+/**
+ * Props for THCFab component.
+ */
 export interface THCFabProps {
-    /** Icon to display */
+    /**
+     * Icon to display
+     */
     icon: string;
-    /** Icon library, default to : "material-icons" */
+    /**
+     * Icon library
+     * @default material-icons
+     */
     iconLib?: string;
-    /** Label */
+    /**
+     * Label
+     */
     label: string;
-    /** Onclick handler */
+    /**
+     * Onclick handler
+     */
     onClick: () => void;
-    /** If is mini, default to "false" */
+    /**
+     * If is mini
+     * @default false
+     */
     mini?: boolean;
-    /** If is exited, default to "false" */
+    /**
+     * If is exited
+     * @default false
+     */
     exited?: boolean;
-    /** Theme options */
+    /**
+     * Theme options
+     */
     theme?: {
         fab?: string;
         icon?: string;
     };
 }
 
-/** Simple implementation for MDCFab. */
+/**
+ * Simple implementation for MDCFab.
+ */
 export class THCFab extends Component<THCFabProps> {
     render() {
         const {

@@ -5,36 +5,67 @@ import classNames from "classnames";
 // Utils
 import { buttonCssClasses } from "./constants";
 
-/** Props for THCButton component. */
+/**
+ * Props for THCButton component.
+ */
 export interface THCButtonProps {
-    /** Icon to display */
+    /**
+     * Icon to display
+     */
     icon?: string;
-    /** Icon library, default to : "material-icons" */
+    /**
+     * Icon library
+     * @default material-icons
+     */
     iconLib?: string;
-    /** Icon position, default to : "before" */
+    /**
+     * Icon position
+     * @default before
+     */
     iconPosition?: "before" | "after";
     /** Label */
     label: string;
-    /** Onclick handler */
+    /**
+     * Onclick handler
+     */
     onClick: () => void;
-    /** If is raised, default to "false" */
+    /**
+     * If is raised
+     * @default false
+     */
     raised?: boolean;
-    /** If is unelevated, default to "false" */
+    /**
+     * If is unelevated
+     * @default false
+     */
     unelevated?: boolean;
-    /** If is outlined, default to "false" */
+    /**
+     * If is outlined
+     * @default false
+     */
     outlined?: boolean;
-    /** If is dense, default to "false" */
+    /**
+     * If is dense
+     * @default false
+     */
     dense?: boolean;
-    /** If is disabled, default to "false" */
+    /**
+     * If is disabled
+     * @default false
+     */
     disabled?: boolean;
-    /** Theme options */
+    /**
+     * Theme options
+     */
     theme?: {
         button?: string;
         icon?: string;
     };
 }
 
-/** Simple implementation for MDCButton. */
+/**
+ * Simple implementation for MDCButton.
+ */
 export class THCButton extends Component<THCButtonProps> {
     render() {
         const {
