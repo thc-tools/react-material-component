@@ -43,13 +43,13 @@ export class THCFab extends Component<THCFabProps> {
             [fabCssClasses.FAB_BASE]: true,
             [fabCssClasses.FAB_MINI]: mini,
             [fabCssClasses.FAB_EXITED]: exited,
-            [theme.fab]: theme.fab !== undefined
+            [theme.fab as any]: theme.fab !== undefined
         });
 
         const iconClassName = classNames({
             [fabCssClasses.FAB_ICON]: true,
             [iconLib]: true,
-            [theme.icon]: theme.icon !== undefined
+            [theme.icon as any]: theme.icon !== undefined
         });
 
         return (

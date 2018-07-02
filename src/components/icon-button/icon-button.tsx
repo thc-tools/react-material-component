@@ -29,7 +29,7 @@ export class THCIconButton extends Component<THCIconButtonProps> {
         const className = classNames({
             [iconCssClasses.ICON_BASE]: true,
             [iconLib]: true,
-            [theme.button]: theme.button != undefined
+            [theme.button as any]: theme.button != undefined
         });
 
         return (

@@ -57,13 +57,13 @@ export class THCButton extends Component<THCButtonProps> {
             [buttonCssClasses.BUTTON_UNELEVATED]: unelevated,
             [buttonCssClasses.BUTTON_OUTLINED]: outlined,
             [buttonCssClasses.BUTTON_DENSE]: dense,
-            [theme.button]: theme.button !== undefined
+            [theme.button as any]: theme.button !== undefined
         });
 
         const iconClassName = classNames({
             [iconLib]: true,
             [buttonCssClasses.BUTTON_ICON]: true,
-            [theme.icon]: theme.icon !== undefined
+            [theme.icon as any]: theme.icon !== undefined
         });
 
         const iconComp = (

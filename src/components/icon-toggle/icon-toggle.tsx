@@ -31,9 +31,9 @@ export interface THCIconToggleProps {
 /** Simple implementation for MDCIconToggle. */
 export class THCIconToggle extends Component<THCIconToggleProps> {
     private iconToggleRef: React.RefObject<HTMLElement>;
-    private iconToggle: MDCIconToggle;
+    private iconToggle?: MDCIconToggle = undefined;
 
-    constructor(props) {
+    constructor(props: THCIconToggleProps) {
         super(props);
 
         this.iconToggleRef = React.createRef();
@@ -41,7 +41,7 @@ export class THCIconToggle extends Component<THCIconToggleProps> {
     }
 
     componentDidMount() {
-        this.iconToggle = new MDCIconToggle(this.iconToggleRef.current);
+        this.iconToggle = new MDCIconToggle(this.iconToggleRef.current!);
 
         this.iconToggle.initialSyncWithDOM();
         this.iconToggle.listen(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
@@ -50,13 +50,17 @@ export class THCIconToggle extends Component<THCIconToggleProps> {
     componentDidUpdate(prevProps: THCIconToggleProps) {
         const { props } = this;
 
+        if (this.iconToggle === undefined) {
+            return;
+        }
+
         if (
             prevProps.iconOn !== props.iconOn ||
             prevProps.iconOff !== props.iconOff ||
             prevProps.labelOn !== props.labelOn ||
             prevProps.labelOff !== props.labelOff ||
-            prevProps.theme.on !== props.theme.on ||
-            prevProps.theme.off !== props.theme.off
+            (prevProps.theme || {}).on !== (props.theme || {}).on ||
+            (prevProps.theme || {}).off !== (props.theme || {}).off
         ) {
             this.iconToggle.refreshToggleData();
         }
@@ -66,11 +70,15 @@ export class THCIconToggle extends Component<THCIconToggleProps> {
         }
 
         if (prevProps.disabled !== props.disabled) {
-            this.iconToggle.disabled = props.disabled;
+            this.iconToggle.disabled = props.disabled || false;
         }
     }
 
     componentWillUnmount() {
+        if (this.iconToggle === undefined) {
+            return;
+        }
+
         this.iconToggle.unlisten(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
         this.iconToggle.destroy();
     }
@@ -97,8 +105,8 @@ export class THCIconToggle extends Component<THCIconToggleProps> {
             [toggleCssClasses.TOGGLE_BASE]: true,
             [toggleCssClasses.TOGGLE_DISABLED]: disabled,
             [iconLib]: true,
-            [theme.toggle]: theme.toggle !== undefined,
-            [value ? theme.on : theme.off]: value ? theme.on !== undefined : theme.off !== undefined
+            [theme.toggle as any]: theme.toggle !== undefined,
+            [(value ? theme.on : theme.off) as any]: value ? theme.on !== undefined : theme.off !== undefined
         });
 
         const defaultLabel = value ? labelOn : labelOff;
