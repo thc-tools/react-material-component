@@ -1,5 +1,5 @@
 // Libs
-import React, { Component } from "react";
+import * as React from "react";
 import classNames from "classnames";
 
 // Utils
@@ -64,7 +64,7 @@ export interface THCButtonProps {
 /**
  * Simple implementation for MDCButton.
  */
-export class THCButton extends Component<THCButtonProps> {
+export class THCButton extends React.Component<THCButtonProps> {
     render() {
         const {
             icon,
@@ -95,7 +95,7 @@ export class THCButton extends Component<THCButtonProps> {
             [theme.icon as any]: theme.icon !== undefined
         });
 
-        const iconComp = (
+        const iconComp = icon && (
             <i className={iconClassName} aria-hidden="true">
                 {icon}
             </i>
@@ -103,9 +103,9 @@ export class THCButton extends Component<THCButtonProps> {
 
         return (
             <button className={buttonClassName} {...otherProps} onClick={onClick}>
-                {icon && iconPosition === "before" && iconComp}
+                {iconPosition === "before" && iconComp}
                 {children}
-                {icon && iconPosition === "after" && iconComp}
+                {iconPosition === "after" && iconComp}
             </button>
         );
     }

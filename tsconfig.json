@@ -17,7 +17,9 @@
         "importHelpers": true,
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+
+        "typeRoots": ["node_modules/@types", "./typings.d.ts"]
     },
     "exclude": ["dist", "node_modules", "./src/**/__test__/*"]
 }
