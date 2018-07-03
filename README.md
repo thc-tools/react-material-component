@@ -2,6 +2,10 @@
 
 Implementation of Material Components Web for React
 
+## Documentation :
+
+Available at : https://thc-tools.github.io/react-material-component
+
 ## Rules :
 
 -   Commit must follow [Conventional Commit convention](https://conventionalcommits.org/)
