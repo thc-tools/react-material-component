@@ -4,6 +4,10 @@ Implementation of Material Components Web for React
 
 [![Build Status](https://travis-ci.org/thc-tools/react-material-component.svg?branch=master)](https://travis-ci.org/thc-tools/react-material-component)
 
+[![dependencies Status](https://david-dm.org/thc-tools/react-material-component/status.svg)](https://david-dm.org/thc-tools/react-material-component)
+[![devDependencies Status](https://david-dm.org/thc-tools/react-material-component/dev-status.svg)](https://david-dm.org/thc-tools/react-material-component?type=dev)
+[![peerDependencies Status](https://david-dm.org/thc-tools/react-material-component/peer-status.svg)](https://david-dm.org/thc-tools/react-material-component?type=peer)
+
 ## Documentation :
 
 Available at : https://thc-tools.github.io/react-material-component
