@@ -24,9 +24,18 @@ export interface THCButtonProps {
      */
     iconPosition?: "before" | "after";
     /**
+     * Label to display
+     */
+    label?: string;
+    /**
      * Onclick handler
      */
     onClick: () => void;
+    /**
+     * Type
+     * @default button
+     */
+    type?: string;
     /**
      * If is raised
      * @default false
@@ -53,6 +62,10 @@ export interface THCButtonProps {
      */
     disabled?: boolean;
     /**
+     * Class name to add to component
+     */
+    className?: string;
+    /**
      * Theme options
      */
     theme?: {
@@ -70,24 +83,30 @@ export class THCButton extends React.Component<THCButtonProps> {
             icon,
             iconLib = "material-icons",
             iconPosition = "before",
+            label,
             onClick,
+            type = "button",
             raised = false,
             unelevated = false,
             outlined = false,
             dense = false,
             theme = {},
             children,
+            className,
             ...otherProps
         } = this.props;
 
-        const buttonClassName = classNames({
-            [buttonCssClasses.BUTTON_BASE]: true,
-            [buttonCssClasses.BUTTON_RAISED]: raised,
-            [buttonCssClasses.BUTTON_UNELEVATED]: unelevated,
-            [buttonCssClasses.BUTTON_OUTLINED]: outlined,
-            [buttonCssClasses.BUTTON_DENSE]: dense,
-            [theme.button as any]: theme.button !== undefined
-        });
+        const buttonClassName = classNames(
+            {
+                [buttonCssClasses.BUTTON_BASE]: true,
+                [buttonCssClasses.BUTTON_RAISED]: raised,
+                [buttonCssClasses.BUTTON_UNELEVATED]: unelevated,
+                [buttonCssClasses.BUTTON_OUTLINED]: outlined,
+                [buttonCssClasses.BUTTON_DENSE]: dense,
+                [theme.button as any]: theme.button !== undefined
+            },
+            className
+        );
 
         const iconClassName = classNames({
             [iconLib]: true,
@@ -102,9 +121,9 @@ export class THCButton extends React.Component<THCButtonProps> {
         );
 
         return (
-            <button className={buttonClassName} {...otherProps} onClick={onClick}>
+            <button className={buttonClassName} type={type} onClick={onClick} {...otherProps}>
                 {iconPosition === "before" && iconComp}
-                {children}
+                {!!children ? children : label}
                 {iconPosition === "after" && iconComp}
             </button>
         );

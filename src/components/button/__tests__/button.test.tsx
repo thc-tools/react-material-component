@@ -7,9 +7,17 @@ import { THCButton } from "../button";
 import { buttonCssClasses } from "../constants";
 
 describe("THCButton component", () => {
-    it("Displays text", () => {
+    it("Displays children", () => {
         // Arrange/Act
         const button = shallow(<THCButton onClick={() => {}}>Mon label</THCButton>);
+
+        // Assert
+        expect(button.text()).toEqual("Mon label");
+    });
+
+    it("Displays label", () => {
+        // Arrange/Act
+        const button = shallow(<THCButton onClick={() => {}} label="Mon label" />);
 
         // Assert
         expect(button.text()).toEqual("Mon label");
@@ -89,7 +97,7 @@ describe("THCButton component", () => {
         expect(icon.text()).toEqual("person");
     });
 
-    it("Can have custom button classname", () => {
+    it("Can have custom button theme", () => {
         // Arrange/Act
         const button = shallow(
             <THCButton onClick={() => {}} theme={{ button: "my-class" }}>
@@ -98,10 +106,11 @@ describe("THCButton component", () => {
         );
 
         // Assert
+        expect(button.hasClass(buttonCssClasses.BUTTON_BASE)).toBeTruthy();
         expect(button.hasClass("my-class")).toBeTruthy();
     });
 
-    it("Can have custom icon classname", () => {
+    it("Can have custom icon theme", () => {
         // Arrange/Act
         const button = shallow(
             <THCButton onClick={() => {}} icon="person" theme={{ icon: "my-class" }}>
@@ -111,7 +120,21 @@ describe("THCButton component", () => {
 
         // Assert
         const icon = button.find(`.${buttonCssClasses.BUTTON_ICON}`);
+        expect(icon.hasClass(buttonCssClasses.BUTTON_ICON)).toBeTruthy();
         expect(icon.hasClass("my-class")).toBeTruthy();
+    });
+
+    it("Can have custom classname", () => {
+        // Arrange/Act
+        const button = shallow(
+            <THCButton onClick={() => {}} className="my-class">
+                Mon label
+            </THCButton>
+        );
+
+        // Assert
+        expect(button.hasClass(buttonCssClasses.BUTTON_BASE)).toBeTruthy();
+        expect(button.hasClass("my-class")).toBeTruthy();
     });
 
     it("Can be clicked", () => {
@@ -124,5 +147,39 @@ describe("THCButton component", () => {
 
         // Assert
         expect(clickHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("Can be have custom data-* property", () => {
+        // Arrange
+        const button = mount(
+            <THCButton onClick={() => {}} data-test="toto">
+                Mon label
+            </THCButton>
+        );
+
+        // Act
+        button.simulate("click");
+
+        // Assert
+        const attribute = button.getDOMNode().attributes.getNamedItem("data-test");
+        expect(attribute).not.toBeNull();
+        expect(attribute!.value).toEqual("toto");
+    });
+
+    it("Can be have custom aria-* property", () => {
+        // Arrange
+        const button = mount(
+            <THCButton onClick={() => {}} aria-label="toto">
+                Mon label
+            </THCButton>
+        );
+
+        // Act
+        button.simulate("click");
+
+        // Assert
+        const attribute = button.getDOMNode().attributes.getNamedItem("aria-label");
+        expect(attribute).not.toBeNull();
+        expect(attribute!.value).toEqual("toto");
     });
 });
