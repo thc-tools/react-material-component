@@ -2,6 +2,8 @@
 
 Implementation of Material Components Web for React
 
+[![Build Status](https://travis-ci.org/thc-tools/react-material-component.svg?branch=master)](https://travis-ci.org/thc-tools/react-material-component)
+
 ## Documentation :
 
 Available at : https://thc-tools.github.io/react-material-component
