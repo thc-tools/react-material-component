@@ -1,5 +1,5 @@
 // Libs
-import React, { Component } from "react";
+import * as React from "react";
 import classNames from "classnames";
 
 // Utils
@@ -12,7 +12,7 @@ export interface THCFabProps {
     /**
      * Icon to display
      */
-    icon: string;
+    icon?: string;
     /**
      * Icon library
      * @default material-icons
@@ -21,7 +21,7 @@ export interface THCFabProps {
     /**
      * Label
      */
-    label: string;
+    label?: string;
     /**
      * Onclick handler
      */
@@ -37,6 +37,10 @@ export interface THCFabProps {
      */
     exited?: boolean;
     /**
+     * Class name to add to component
+     */
+    className?: string;
+    /**
      * Theme options
      */
     theme?: {
@@ -48,24 +52,30 @@ export interface THCFabProps {
 /**
  * Simple implementation for MDCFab.
  */
-export class THCFab extends Component<THCFabProps> {
+export class THCFab extends React.Component<THCFabProps> {
     render() {
         const {
             icon,
             iconLib = "material-icons",
             label,
+            children,
             onClick,
             mini = false,
             exited = false,
-            theme = {}
+            className,
+            theme = {},
+            ...otherProps
         } = this.props;
 
-        const fabClassName = classNames({
-            [fabCssClasses.FAB_BASE]: true,
-            [fabCssClasses.FAB_MINI]: mini,
-            [fabCssClasses.FAB_EXITED]: exited,
-            [theme.fab as any]: theme.fab !== undefined
-        });
+        const fabClassName = classNames(
+            {
+                [fabCssClasses.FAB_BASE]: true,
+                [fabCssClasses.FAB_MINI]: mini,
+                [fabCssClasses.FAB_EXITED]: exited,
+                [theme.fab as any]: theme.fab !== undefined
+            },
+            className
+        );
 
         const iconClassName = classNames({
             [fabCssClasses.FAB_ICON]: true,
@@ -73,9 +83,13 @@ export class THCFab extends Component<THCFabProps> {
             [theme.icon as any]: theme.icon !== undefined
         });
 
+        if (label) {
+            (otherProps as any)["aria-label"] = label;
+        }
+
         return (
-            <button className={fabClassName} aria-label={label} onClick={onClick}>
-                <span className={iconClassName}>{icon}</span>
+            <button className={fabClassName} onClick={onClick} {...otherProps}>
+                <span className={iconClassName}>{!!children ? children : icon}</span>
             </button>
         );
     }
