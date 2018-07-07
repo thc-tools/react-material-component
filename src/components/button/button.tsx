@@ -102,17 +102,19 @@ export class THCButton extends React.Component<THCButtonProps> {
                 [buttonCssClasses.BUTTON_RAISED]: raised,
                 [buttonCssClasses.BUTTON_UNELEVATED]: unelevated,
                 [buttonCssClasses.BUTTON_OUTLINED]: outlined,
-                [buttonCssClasses.BUTTON_DENSE]: dense,
-                [theme.button as any]: theme.button !== undefined
+                [buttonCssClasses.BUTTON_DENSE]: dense
             },
+            theme.button,
             className
         );
 
-        const iconClassName = classNames({
-            [iconLib]: true,
-            [buttonCssClasses.BUTTON_ICON]: true,
-            [theme.icon as any]: theme.icon !== undefined
-        });
+        const iconClassName = classNames(
+            {
+                [iconLib]: true,
+                [buttonCssClasses.BUTTON_ICON]: true
+            },
+            theme.icon
+        );
 
         const iconComp = icon && (
             <i className={iconClassName} aria-hidden="true">

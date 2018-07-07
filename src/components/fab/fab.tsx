@@ -71,17 +71,20 @@ export class THCFab extends React.Component<THCFabProps> {
             {
                 [fabCssClasses.FAB_BASE]: true,
                 [fabCssClasses.FAB_MINI]: mini,
-                [fabCssClasses.FAB_EXITED]: exited,
-                [theme.fab as any]: theme.fab !== undefined
+                [fabCssClasses.FAB_EXITED]: exited
             },
+            theme.fab,
             className
         );
 
-        const iconClassName = classNames({
-            [fabCssClasses.FAB_ICON]: true,
-            [iconLib]: true,
-            [theme.icon as any]: theme.icon !== undefined
-        });
+        const iconClassName = classNames(
+            {
+                [fabCssClasses.FAB_ICON]: true,
+                [iconLib]: true,
+                [theme.icon as any]: theme.icon !== undefined
+            },
+            theme.icon
+        );
 
         if (label) {
             (otherProps as any)["aria-label"] = label;
