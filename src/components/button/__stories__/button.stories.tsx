@@ -1,8 +1,11 @@
+// Lubs
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { THCButton } from "../button";
 import { withInfo } from "@storybook/addon-info";
+
+// Components
+import { THCButton } from "../button";
 
 storiesOf("Buttons/THCButton", module)
     .add(

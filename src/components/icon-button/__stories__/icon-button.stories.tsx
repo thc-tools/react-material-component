@@ -1,8 +1,11 @@
+// Libs
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { THCIconButton } from "../icon-button";
 import { withInfo } from "@storybook/addon-info";
+
+// Components
+import { THCIconButton } from "../icon-button";
 
 storiesOf("Buttons/THCIconButton", module)
     .add(

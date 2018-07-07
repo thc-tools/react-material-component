@@ -1,8 +1,11 @@
+// Libs
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { THCFab } from "../fab";
 import { withInfo } from "@storybook/addon-info";
+
+// Components
+import { THCFab } from "../fab";
 
 storiesOf("Buttons/THCFab", module)
     .add("Base", withInfo({ inline: true, header: false })(() => <THCFab onClick={action("clicked")}>person</THCFab>))
