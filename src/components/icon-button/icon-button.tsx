@@ -1,5 +1,5 @@
 // Libs
-import React, { Component } from "react";
+import * as React from "react";
 import classNames from "classnames";
 
 // Utils
@@ -12,7 +12,7 @@ export interface THCIconButtonProps {
     /**
      * Icon to display
      */
-    icon: string;
+    icon?: string;
     /**
      * Icon library
      * @default material-icons
@@ -21,7 +21,7 @@ export interface THCIconButtonProps {
     /**
      * Label
      */
-    label: string;
+    label?: string;
     /**
      * Onclick handler
      */
@@ -32,6 +32,10 @@ export interface THCIconButtonProps {
      */
     disabled?: boolean;
     /**
+     * Class name to add to component
+     */
+    className?: string;
+    /**
      * Theme options
      */
     theme?: { button?: string };
@@ -40,19 +44,35 @@ export interface THCIconButtonProps {
 /**
  * Simple implementation for MDCIconButton.
  */
-export class THCIconButton extends Component<THCIconButtonProps> {
+export class THCIconButton extends React.Component<THCIconButtonProps> {
     render() {
-        const { icon, iconLib = "material-icons", label, onClick, theme = {}, ...otherProps } = this.props;
+        const {
+            icon,
+            iconLib = "material-icons",
+            label,
+            children,
+            onClick,
+            className,
+            theme = {},
+            ...otherProps
+        } = this.props;
 
-        const className = classNames({
-            [iconCssClasses.ICON_BASE]: true,
-            [iconLib]: true,
-            [theme.button as any]: theme.button != undefined
-        });
+        const iconButtonClassName = classNames(
+            {
+                [iconCssClasses.ICON_BUTTON_BASE]: true,
+                [iconLib]: true
+            },
+            className,
+            theme.button
+        );
+
+        if (label) {
+            (otherProps as any)["aria-label"] = label;
+        }
 
         return (
-            <button className={className} onClick={onClick} aria-label={label} {...otherProps}>
-                {icon}
+            <button className={iconButtonClassName} onClick={onClick} {...otherProps}>
+                {!!children ? children : icon}
             </button>
         );
     }

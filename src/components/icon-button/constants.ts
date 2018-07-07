@@ -1,5 +1,5 @@
-const ICON_BASE = "mdc-icon-button";
+const ICON_BUTTON_BASE = "mdc-icon-button";
 
 export const iconCssClasses = {
-    ICON_BASE
+    ICON_BUTTON_BASE
 };
