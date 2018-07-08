@@ -34,5 +34,18 @@ storiesOf("Buttons/THCIconToggle", module)
                     value={true}
                 />
             </div>
+
+            <div>
+                <h1 className="mdc-typography--headline5">Disabled</h1>
+                <THCIconToggle
+                    onClick={action("clicked")}
+                    iconOn="play_arrow"
+                    labelOn="I'm playing"
+                    iconOff="pause"
+                    labelOff="I'm paused"
+                    value={true}
+                    disabled
+                />
+            </div>
         </div>
     ));

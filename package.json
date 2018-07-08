@@ -11,7 +11,9 @@
         "release-alpha": "npm publish --tag alpha --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
         "release-beta": "npm publish --tag beta --access public && conventional-github-releaser -p angular && git push --follow-tags origin master",
         "test": "jest",
+        "sb": "npm run storybook",
         "storybook": "start-storybook -p 6006",
+        "bsb": "npm run build-storybook",
         "build-storybook": "build-storybook -o ./docs"
     },
     "repository": {
