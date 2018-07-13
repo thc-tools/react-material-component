@@ -9,8 +9,7 @@ module.exports = {
 
     // Setup Enzyme
     snapshotSerializers: ["enzyme-to-json/serializer"],
-    setupTestFrameworkScriptFile: "<rootDir>/enzyme.config.js",
-    transformIgnorePatterns: [
-        "node_modules/(?!(@material|my-project)/)"    
-    ]
+    setupTestFrameworkScriptFile: "jest-enzyme",
+    testEnvironment: "enzyme",
+    transformIgnorePatterns: ["node_modules/(?!(@material|my-project)/)"]
 };

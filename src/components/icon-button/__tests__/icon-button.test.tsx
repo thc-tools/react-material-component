@@ -78,15 +78,12 @@ describe("THCIconButton component", () => {
     });
 
     it("Can be have custom data-* property", () => {
-        // Arrange
+        // Arrange/Act
         const fab = mount(
             <THCIconButton onClick={() => {}} data-test="toto">
                 Mon label
             </THCIconButton>
         );
-
-        // Act
-        fab.simulate("click");
 
         // Assert
         const attribute = fab.getDOMNode().attributes.getNamedItem("data-test");
@@ -95,15 +92,12 @@ describe("THCIconButton component", () => {
     });
 
     it("Can be have custom aria-* property", () => {
-        // Arrange
+        // Arrange/Act
         const fab = mount(
             <THCIconButton onClick={() => {}} aria-label="toto">
                 Mon label
             </THCIconButton>
         );
-
-        // Act
-        fab.simulate("click");
 
         // Assert
         const attribute = fab.getDOMNode().attributes.getNamedItem("aria-label");
