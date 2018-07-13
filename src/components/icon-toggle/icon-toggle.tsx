@@ -114,6 +114,7 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
 
     handleChange({ detail: { isOn } }: { detail: { isOn: boolean } }) {
         const { onClick } = this.props;
+        console.log("handleChange");
 
         onClick(isOn);
     }
@@ -128,7 +129,9 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
             value,
             disabled = false,
             className,
-            theme = {}
+            theme = {},
+            onClick,
+            ...otherProps
         } = this.props;
 
         const iconToggleClassName = classNames(
@@ -153,6 +156,7 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
                 role="button"
                 data-toggle-on={dataToggleOn}
                 data-toggle-off={dataToggleOff}
+                {...otherProps as any}
             />
         );
     }
