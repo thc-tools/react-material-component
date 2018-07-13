@@ -1,7 +1,7 @@
 // Libs
 import * as React from "react";
 import classNames from "classnames";
-import { MDCIconToggle, MDCIconToggleFoundation } from "@material/icon-toggle";
+import { MDCIconToggleFoundation } from "@material/icon-toggle";
 
 // Utils
 import { toggleCssClasses } from "./constants";
@@ -54,32 +54,173 @@ export interface THCIconToggleProps {
     theme?: { toggle?: string; on?: string; off?: string };
 }
 
+interface THCIconToggleState {
+    classNames: { [className: string]: boolean };
+    attributes: { [attribute: string]: string };
+    events: { [name: string]: EventListener[] };
+    text?: string;
+    tabIndex: number;
+    value?: any;
+}
+
 /**
  * Simple implementation for MDCIconToggle.
  */
-export class THCIconToggle extends React.Component<THCIconToggleProps> {
-    private iconToggleRef: React.RefObject<HTMLElement>;
-    private iconToggle?: MDCIconToggle = undefined;
+export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconToggleState> {
+    private iconToggleFoundation?: MDCIconToggleFoundation = undefined;
+
+    state = {
+        classNames: {},
+        attributes: {},
+        events: {},
+        text: undefined,
+        tabIndex: 0
+    };
 
     constructor(props: THCIconToggleProps) {
         super(props);
 
-        this.iconToggleRef = React.createRef();
         this.handleChange = this.handleChange.bind(this);
+
+        this.iconToggleFoundation = new MDCIconToggleFoundation({
+            addClass: className => this.addClass(className),
+            removeClass: className => this.removeClass(className),
+            registerInteractionHandler: (type, handler) => this.registerEventListener(type, handler),
+            deregisterInteractionHandler: (type, handler) => this.removeEventListener(type, handler),
+            setText: text => this.setText(text),
+            getTabIndex: () => this.getTabIndex(),
+            setTabIndex: tabIndex => this.setTabIndex(tabIndex),
+            getAttr: name => this.getAttribute(name),
+            setAttr: (name, value) => this.setAttribute(name, value),
+            rmAttr: name => this.removeAttribute(name),
+            notifyChange: evtData => this.emit(MDCIconToggleFoundation.strings.CHANGE_EVENT, evtData as any)
+        });
+    }
+
+    protected emit(type: string, event: Event) {
+        if (!this.state.events.hasOwnProperty(type)) {
+            return;
+        }
+
+        ((this.state.events as any)[type] as EventListener[]).forEach(fn => {
+            fn(event);
+        });
+    }
+
+    protected registerEventListener(type: string, handler: EventListener) {
+        this.setState(state => {
+            if (state.events.hasOwnProperty(type)) {
+                return {
+                    events: {
+                        ...state.events,
+                        [type]: [...state.events[type], handler]
+                    }
+                };
+            }
+
+            return {
+                events: {
+                    ...state.events,
+                    [type]: [handler]
+                }
+            };
+        });
+    }
+
+    protected removeEventListener(type: string, handler: EventListener) {
+        this.setState(state => {
+            if (!state.events.hasOwnProperty(type)) {
+                return {} as any;
+            }
+
+            return {
+                events: {
+                    ...state.events,
+                    [type]: state.events[type].filter(fn => fn !== handler)
+                }
+            };
+        });
+    }
+
+    protected setText(text: string) {
+        this.setState({ text });
+    }
+
+    protected getTabIndex() {
+        return this.state.tabIndex;
+    }
+
+    protected setTabIndex(tabIndex: number) {
+        this.setState({ tabIndex });
+    }
+
+    protected getAttribute(name: string) {
+        const { iconOn, iconOff, labelOn, labelOff, theme = {} } = this.props;
+
+        if (name === "data-toggle-on") {
+            const dataToggleOn = JSON.stringify({ label: labelOn, content: iconOn, cssClass: theme.on });
+
+            return dataToggleOn;
+        }
+
+        if (name === "data-toggle-off") {
+            const dataToggleOff = JSON.stringify({ label: labelOff, content: iconOff, cssClass: theme.off });
+
+            return dataToggleOff;
+        }
+
+        return (this.state.attributes as any)[name] as string;
+    }
+
+    protected setAttribute(name: string, value: string) {
+        this.setState(state => {
+            return { attributes: { ...state.attributes, [name]: value } };
+        });
+    }
+
+    protected removeAttribute(name: string) {
+        this.setState(state => {
+            if (!state.attributes.hasOwnProperty(name)) {
+                return {} as any;
+            }
+
+            return {
+                attributes: Object.keys(state.attributes).reduce((acc, key) => {
+                    if (key === name) {
+                        return { ...acc };
+                    }
+
+                    return { ...acc, [key]: state.attributes[key] };
+                }, {})
+            };
+        });
+    }
+
+    protected addClass(className: string) {
+        this.setState(state => {
+            return { classNames: { ...state.classNames, [className]: true } };
+        });
+    }
+
+    protected removeClass(className: string) {
+        this.setState(state => {
+            return { classNames: { ...state.classNames, [className]: false } };
+        });
     }
 
     componentDidMount() {
-        this.iconToggle = new MDCIconToggle(this.iconToggleRef.current!);
-
-        this.iconToggle.on = this.props.value;
-        this.iconToggle.disabled = this.props.disabled || false;
-        this.iconToggle.listen(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
+        if (this.iconToggleFoundation) {
+            this.iconToggleFoundation.init();
+            this.iconToggleFoundation.toggle(this.props.value);
+            this.iconToggleFoundation.setDisabled(this.props.disabled || false);
+            this.registerEventListener(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
+        }
     }
 
     componentDidUpdate(prevProps: THCIconToggleProps) {
         const { props } = this;
 
-        if (this.iconToggle === undefined) {
+        if (this.iconToggleFoundation === undefined) {
             return;
         }
 
@@ -91,32 +232,45 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
             (prevProps.theme || {}).on !== (props.theme || {}).on ||
             (prevProps.theme || {}).off !== (props.theme || {}).off
         ) {
-            this.iconToggle.refreshToggleData();
+            this.iconToggleFoundation.refreshToggleData();
         }
 
         if (prevProps.value !== props.value) {
-            this.iconToggle.on = props.value;
+            this.iconToggleFoundation.toggle(props.value);
         }
 
         if (prevProps.disabled !== props.disabled) {
-            this.iconToggle.disabled = props.disabled || false;
+            this.iconToggleFoundation.setDisabled(props.disabled || false);
         }
     }
 
     componentWillUnmount() {
-        if (this.iconToggle === undefined) {
+        if (this.iconToggleFoundation === undefined) {
             return;
         }
 
-        this.iconToggle.unlisten(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
-        this.iconToggle.destroy();
+        this.removeEventListener(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
+        this.iconToggleFoundation.destroy();
     }
 
-    handleChange({ detail: { isOn } }: { detail: { isOn: boolean } }) {
+    handleChange({ isOn }: { isOn: boolean }) {
         const { onClick } = this.props;
         console.log("handleChange");
 
         onClick(isOn);
+    }
+
+    buildEvents() {
+        return Object.keys(this.state.events).reduce((acc: any, type: string) => {
+            if (type.startsWith("MDC")) {
+                return acc;
+            }
+
+            const eventName = `on${type.slice(0, 1).toUpperCase()}${type.slice(1)}`;
+            const eventFn = (e: Event) => (this.state.events as any)[type].forEach((fn: EventListener) => fn(e));
+
+            return { ...acc, [eventName]: eventFn };
+        }, {});
     }
 
     render() {
@@ -126,38 +280,34 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
             iconLib = "material-icons",
             labelOn,
             labelOff,
-            value,
-            disabled = false,
+            onClick,
             className,
             theme = {},
-            onClick,
             ...otherProps
         } = this.props;
+        const { text, tabIndex, classNames: foundationClassnames, attributes } = this.state;
 
         const iconToggleClassName = classNames(
             {
                 [toggleCssClasses.TOGGLE_BASE]: true,
-                [toggleCssClasses.TOGGLE_DISABLED]: disabled,
-                [iconLib]: true,
-                [theme.on as any]: value && !!theme.on,
-                [theme.off as any]: !value && !!theme.off
+                [iconLib]: true
             },
             className,
+            foundationClassnames,
             theme.toggle
         );
 
-        const dataToggleOn = JSON.stringify({ label: labelOn, content: iconOn, cssClass: theme.on });
-        const dataToggleOff = JSON.stringify({ label: labelOff, content: iconOff, cssClass: theme.off });
-
         return (
             <i
-                ref={this.iconToggleRef}
                 className={iconToggleClassName}
                 role="button"
-                data-toggle-on={dataToggleOn}
-                data-toggle-off={dataToggleOff}
+                tabIndex={tabIndex}
+                {...this.buildEvents()}
+                {...attributes}
                 {...otherProps as any}
-            />
+            >
+                {text}
+            </i>
         );
     }
 }
