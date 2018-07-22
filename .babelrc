@@ -1,3 +1,11 @@
 {
-  "presets": ["env", "react"]
+    "presets": [
+        [
+            "@thc/babel-preset-react",
+            {
+                "hot": false,
+                "mode": "production"
+            }
+        ]
+    ]
 }
