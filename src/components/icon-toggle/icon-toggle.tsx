@@ -1,7 +1,10 @@
 // Libs
 import * as React from "react";
-import classNames from "classnames";
+import classnames from "classnames";
 import { MDCIconToggleFoundation } from "@material/icon-toggle";
+
+// Components
+import { THCBaseAdapter, THCBaseAdapterState } from "../base/base.adapter";
 
 // Utils
 import { toggleCssClasses } from "./constants";
@@ -55,9 +58,6 @@ export interface THCIconToggleProps {
 }
 
 interface THCIconToggleState {
-    classNames: { [className: string]: boolean };
-    attributes: { [attribute: string]: string };
-    events: { [name: string]: EventListener[] };
     text?: string;
     tabIndex: number;
     value?: any;
@@ -66,16 +66,14 @@ interface THCIconToggleState {
 /**
  * Simple implementation for MDCIconToggle.
  */
-export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconToggleState> {
+export class THCIconToggle extends THCBaseAdapter<THCIconToggleProps, THCIconToggleState> {
     private iconToggleFoundation?: MDCIconToggleFoundation = undefined;
 
     state = {
-        classNames: {},
-        attributes: {},
-        events: {},
+        ...THCBaseAdapter.getDefaultState(),
         text: undefined,
         tabIndex: 0
-    };
+    } as THCIconToggleState & THCBaseAdapterState;
 
     constructor(props: THCIconToggleProps) {
         super(props);
@@ -83,62 +81,11 @@ export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconTo
         this.handleChange = this.handleChange.bind(this);
 
         this.iconToggleFoundation = new MDCIconToggleFoundation({
-            addClass: className => this.addClass(className),
-            removeClass: className => this.removeClass(className),
-            registerInteractionHandler: (type, handler) => this.registerEventListener(type, handler),
-            deregisterInteractionHandler: (type, handler) => this.removeEventListener(type, handler),
+            ...this.getDefaultAdapter(),
             setText: text => this.setText(text),
             getTabIndex: () => this.getTabIndex(),
             setTabIndex: tabIndex => this.setTabIndex(tabIndex),
-            getAttr: name => this.getAttribute(name),
-            setAttr: (name, value) => this.setAttribute(name, value),
-            rmAttr: name => this.removeAttribute(name),
             notifyChange: evtData => this.emit(MDCIconToggleFoundation.strings.CHANGE_EVENT, evtData as any)
-        });
-    }
-
-    protected emit(type: string, event: Event) {
-        if (!this.state.events.hasOwnProperty(type)) {
-            return;
-        }
-
-        ((this.state.events as any)[type] as EventListener[]).forEach(fn => {
-            fn(event);
-        });
-    }
-
-    protected registerEventListener(type: string, handler: EventListener) {
-        this.setState(state => {
-            if (state.events.hasOwnProperty(type)) {
-                return {
-                    events: {
-                        ...state.events,
-                        [type]: [...state.events[type], handler]
-                    }
-                };
-            }
-
-            return {
-                events: {
-                    ...state.events,
-                    [type]: [handler]
-                }
-            };
-        });
-    }
-
-    protected removeEventListener(type: string, handler: EventListener) {
-        this.setState(state => {
-            if (!state.events.hasOwnProperty(type)) {
-                return {} as any;
-            }
-
-            return {
-                events: {
-                    ...state.events,
-                    [type]: state.events[type].filter(fn => fn !== handler)
-                }
-            };
         });
     }
 
@@ -154,7 +101,7 @@ export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconTo
         this.setState({ tabIndex });
     }
 
-    protected getAttribute(name: string) {
+    protected customGetAttribute(name: string) {
         const { iconOn, iconOff, labelOn, labelOff, theme = {} } = this.props;
 
         if (name === "data-toggle-on") {
@@ -169,43 +116,7 @@ export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconTo
             return dataToggleOff;
         }
 
-        return (this.state.attributes as any)[name] as string;
-    }
-
-    protected setAttribute(name: string, value: string) {
-        this.setState(state => {
-            return { attributes: { ...state.attributes, [name]: value } };
-        });
-    }
-
-    protected removeAttribute(name: string) {
-        this.setState(state => {
-            if (!state.attributes.hasOwnProperty(name)) {
-                return {} as any;
-            }
-
-            return {
-                attributes: Object.keys(state.attributes).reduce((acc, key) => {
-                    if (key === name) {
-                        return { ...acc };
-                    }
-
-                    return { ...acc, [key]: state.attributes[key] };
-                }, {})
-            };
-        });
-    }
-
-    protected addClass(className: string) {
-        this.setState(state => {
-            return { classNames: { ...state.classNames, [className]: true } };
-        });
-    }
-
-    protected removeClass(className: string) {
-        this.setState(state => {
-            return { classNames: { ...state.classNames, [className]: false } };
-        });
+        return "";
     }
 
     componentDidMount() {
@@ -255,22 +166,8 @@ export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconTo
 
     handleChange({ isOn }: { isOn: boolean }) {
         const { onClick } = this.props;
-        console.log("handleChange");
 
         onClick(isOn);
-    }
-
-    buildEvents() {
-        return Object.keys(this.state.events).reduce((acc: any, type: string) => {
-            if (type.startsWith("MDC")) {
-                return acc;
-            }
-
-            const eventName = `on${type.slice(0, 1).toUpperCase()}${type.slice(1)}`;
-            const eventFn = (e: Event) => (this.state.events as any)[type].forEach((fn: EventListener) => fn(e));
-
-            return { ...acc, [eventName]: eventFn };
-        }, {});
     }
 
     render() {
@@ -285,16 +182,16 @@ export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconTo
             theme = {},
             ...otherProps
         } = this.props;
-        const { text, tabIndex, classNames: foundationClassnames, attributes } = this.state;
+        const { text, tabIndex } = this.state;
 
-        const iconToggleClassName = classNames(
+        const iconToggleClassName = classnames(
             {
                 [toggleCssClasses.TOGGLE_BASE]: true,
                 [iconLib]: true
             },
             className,
-            foundationClassnames,
-            theme.toggle
+            theme.toggle,
+            this.buildClassnames()
         );
 
         return (
@@ -303,7 +200,7 @@ export class THCIconToggle extends React.Component<THCIconToggleProps, THCIconTo
                 role="button"
                 tabIndex={tabIndex}
                 {...this.buildEvents()}
-                {...attributes}
+                {...this.buildAttributes()}
                 {...otherProps as any}
             >
                 {text}
