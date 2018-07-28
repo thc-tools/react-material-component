@@ -11,7 +11,7 @@ export interface Attribute {
  * State of base Adapter Component.
  */
 export interface THCBaseAdapterState {
-    classNames: { [className: string]: boolean };
+    classNames: string[];
     attributes: Attribute[];
     events: { [name: string]: EventListener[] };
 }
@@ -22,7 +22,7 @@ export class THCBaseAdapter<P extends object, S extends object> extends React.Co
      */
     static getDefaultState() {
         return {
-            classNames: {},
+            classNames: [],
             attributes: [],
             events: {}
         } as THCBaseAdapterState;
@@ -123,8 +123,7 @@ export class THCBaseAdapter<P extends object, S extends object> extends React.Co
                 .filter(type => !type.startsWith("MDC"))
                 .reduce((acc: any, type: string) => {
                     const eventName = `on${type.slice(0, 1).toUpperCase()}${type.slice(1)}`;
-                    const eventFn = (e: Event) =>
-                        (this.state.events as any)[type].forEach((fn: EventListener) => fn(e));
+                    const eventFn = (e: Event) => this.emit(type, e);
 
                     return { ...acc, [eventName]: eventFn };
                 }, {})
@@ -205,7 +204,7 @@ export class THCBaseAdapter<P extends object, S extends object> extends React.Co
      */
     protected addClass(className: string) {
         this.setState(state => {
-            return { classNames: { ...(state as THCBaseAdapterState).classNames, [className]: true } };
+            return { classNames: [...state.classNames, className] };
         });
     }
 
@@ -215,7 +214,7 @@ export class THCBaseAdapter<P extends object, S extends object> extends React.Co
      */
     protected removeClass(className: string) {
         this.setState(state => {
-            return { classNames: { ...(state as THCBaseAdapterState).classNames, [className]: false } };
+            return { classNames: state.classNames.filter(cls => cls !== className) };
         });
     }
 
