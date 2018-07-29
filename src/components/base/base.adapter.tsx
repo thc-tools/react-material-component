@@ -2,6 +2,9 @@
 import * as React from "react";
 import classnames from "classnames";
 
+// Utils
+import { mapEventName } from "../../utils/attributes";
+
 export interface Attribute {
     attribute: string;
     value: string;
@@ -122,7 +125,7 @@ export class THCBaseAdapter<P extends object, S extends object> extends React.Co
                 // MDC events are not to be given to child component
                 .filter(type => !type.startsWith("MDC"))
                 .reduce((acc: any, type: string) => {
-                    const eventName = `on${type.slice(0, 1).toUpperCase()}${type.slice(1)}`;
+                    const eventName = mapEventName(type);
                     const eventFn = (e: Event) => this.emit(type, e);
 
                     return { ...acc, [eventName]: eventFn };

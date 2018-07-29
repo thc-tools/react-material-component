@@ -8,6 +8,7 @@ import { THCBaseAdapter, THCBaseAdapterState } from "../base/base.adapter";
 
 // Utils
 import { toggleCssClasses } from "./constants";
+import { filterProps } from "../../utils/attributes";
 
 /**
  * Props for THCIconToggle component.
@@ -201,7 +202,7 @@ export class THCIconToggle extends THCBaseAdapter<THCIconToggleProps, THCIconTog
                 tabIndex={tabIndex}
                 {...this.buildEvents()}
                 {...this.buildAttributes()}
-                {...otherProps as any}
+                {...filterProps(otherProps)}
             >
                 {text}
             </i>

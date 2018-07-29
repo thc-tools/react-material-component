@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 // Utils
 import { fabCssClasses } from "./constants";
+import { filterProps } from "../../utils/attributes";
 
 /**
  * Props for THCFab component.
@@ -91,7 +92,7 @@ export class THCFab extends React.Component<THCFabProps> {
         }
 
         return (
-            <button className={fabClassName} onClick={onClick} {...otherProps}>
+            <button className={fabClassName} onClick={onClick} {...filterProps(otherProps)}>
                 <span className={iconClassName}>{!!children ? children : icon}</span>
             </button>
         );

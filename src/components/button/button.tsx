@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 // Utils
 import { buttonCssClasses } from "./constants";
+import { filterProps } from "../../utils/attributes";
 
 /**
  * Props for THCButton component.
@@ -123,7 +124,7 @@ export class THCButton extends React.Component<THCButtonProps> {
         );
 
         return (
-            <button className={buttonClassName} type={type} onClick={onClick} {...otherProps}>
+            <button className={buttonClassName} type={type} onClick={onClick} {...filterProps(otherProps)}>
                 {iconPosition === "before" && iconComp}
                 {!!children ? children : label}
                 {iconPosition === "after" && iconComp}

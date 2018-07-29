@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 // Utils
 import { iconCssClasses } from "./constants";
+import { filterProps } from "../../utils/attributes";
 
 /**
  * Props for THCIconButton component.
@@ -71,7 +72,7 @@ export class THCIconButton extends React.Component<THCIconButtonProps> {
         }
 
         return (
-            <button className={iconButtonClassName} onClick={onClick} {...otherProps}>
+            <button className={iconButtonClassName} onClick={onClick} {...filterProps(otherProps)}>
                 {!!children ? children : icon}
             </button>
         );
