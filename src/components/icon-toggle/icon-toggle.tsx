@@ -1,10 +1,14 @@
 // Libs
 import * as React from "react";
-import classNames from "classnames";
-import { MDCIconToggle, MDCIconToggleFoundation } from "@material/icon-toggle";
+import classnames from "classnames";
+import { MDCIconToggleFoundation } from "@material/icon-toggle";
+
+// Components
+import { THCBaseAdapter, THCBaseAdapterState } from "../base/base.adapter";
 
 // Utils
 import { toggleCssClasses } from "./constants";
+import { filterProps } from "../../utils/attributes";
 
 /**
  * Props for THCIconToggle component.
@@ -54,32 +58,81 @@ export interface THCIconToggleProps {
     theme?: { toggle?: string; on?: string; off?: string };
 }
 
+interface THCIconToggleState {
+    text?: string;
+    tabIndex: number;
+    value?: any;
+}
+
 /**
  * Simple implementation for MDCIconToggle.
  */
-export class THCIconToggle extends React.Component<THCIconToggleProps> {
-    private iconToggleRef: React.RefObject<HTMLElement>;
-    private iconToggle?: MDCIconToggle = undefined;
+export class THCIconToggle extends THCBaseAdapter<THCIconToggleProps, THCIconToggleState> {
+    private iconToggleFoundation?: MDCIconToggleFoundation = undefined;
+
+    state = {
+        ...THCBaseAdapter.getDefaultState(),
+        text: undefined,
+        tabIndex: 0
+    } as THCIconToggleState & THCBaseAdapterState;
 
     constructor(props: THCIconToggleProps) {
         super(props);
 
-        this.iconToggleRef = React.createRef();
         this.handleChange = this.handleChange.bind(this);
+
+        this.iconToggleFoundation = new MDCIconToggleFoundation({
+            ...this.getDefaultAdapter(),
+            setText: text => this.setText(text),
+            getTabIndex: () => this.getTabIndex(),
+            setTabIndex: tabIndex => this.setTabIndex(tabIndex),
+            notifyChange: evtData => this.emit(MDCIconToggleFoundation.strings.CHANGE_EVENT, evtData as any)
+        });
+    }
+
+    protected setText(text: string) {
+        this.setState({ text });
+    }
+
+    protected getTabIndex() {
+        return this.state.tabIndex;
+    }
+
+    protected setTabIndex(tabIndex: number) {
+        this.setState({ tabIndex });
+    }
+
+    protected customGetAttribute(name: string) {
+        const { iconOn, iconOff, labelOn, labelOff, theme = {} } = this.props;
+
+        if (name === "data-toggle-on") {
+            const dataToggleOn = JSON.stringify({ label: labelOn, content: iconOn, cssClass: theme.on });
+
+            return dataToggleOn;
+        }
+
+        if (name === "data-toggle-off") {
+            const dataToggleOff = JSON.stringify({ label: labelOff, content: iconOff, cssClass: theme.off });
+
+            return dataToggleOff;
+        }
+
+        return "";
     }
 
     componentDidMount() {
-        this.iconToggle = new MDCIconToggle(this.iconToggleRef.current!);
-
-        this.iconToggle.on = this.props.value;
-        this.iconToggle.disabled = this.props.disabled || false;
-        this.iconToggle.listen(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
+        if (this.iconToggleFoundation) {
+            this.iconToggleFoundation.init();
+            this.iconToggleFoundation.toggle(this.props.value);
+            this.iconToggleFoundation.setDisabled(this.props.disabled || false);
+            this.registerEventListener(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
+        }
     }
 
     componentDidUpdate(prevProps: THCIconToggleProps) {
         const { props } = this;
 
-        if (this.iconToggle === undefined) {
+        if (this.iconToggleFoundation === undefined) {
             return;
         }
 
@@ -91,30 +144,29 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
             (prevProps.theme || {}).on !== (props.theme || {}).on ||
             (prevProps.theme || {}).off !== (props.theme || {}).off
         ) {
-            this.iconToggle.refreshToggleData();
+            this.iconToggleFoundation.refreshToggleData();
         }
 
         if (prevProps.value !== props.value) {
-            this.iconToggle.on = props.value;
+            this.iconToggleFoundation.toggle(props.value);
         }
 
         if (prevProps.disabled !== props.disabled) {
-            this.iconToggle.disabled = props.disabled || false;
+            this.iconToggleFoundation.setDisabled(props.disabled || false);
         }
     }
 
     componentWillUnmount() {
-        if (this.iconToggle === undefined) {
+        if (this.iconToggleFoundation === undefined) {
             return;
         }
 
-        this.iconToggle.unlisten(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
-        this.iconToggle.destroy();
+        this.removeEventListener(MDCIconToggleFoundation.strings.CHANGE_EVENT, this.handleChange as any);
+        this.iconToggleFoundation.destroy();
     }
 
-    handleChange({ detail: { isOn } }: { detail: { isOn: boolean } }) {
+    handleChange({ isOn }: { isOn: boolean }) {
         const { onClick } = this.props;
-        console.log("handleChange");
 
         onClick(isOn);
     }
@@ -126,38 +178,34 @@ export class THCIconToggle extends React.Component<THCIconToggleProps> {
             iconLib = "material-icons",
             labelOn,
             labelOff,
-            value,
-            disabled = false,
+            onClick,
             className,
             theme = {},
-            onClick,
             ...otherProps
         } = this.props;
+        const { text, tabIndex } = this.state;
 
-        const iconToggleClassName = classNames(
+        const iconToggleClassName = classnames(
             {
                 [toggleCssClasses.TOGGLE_BASE]: true,
-                [toggleCssClasses.TOGGLE_DISABLED]: disabled,
-                [iconLib]: true,
-                [theme.on as any]: value && !!theme.on,
-                [theme.off as any]: !value && !!theme.off
+                [iconLib]: true
             },
             className,
-            theme.toggle
+            theme.toggle,
+            this.buildClassnames()
         );
-
-        const dataToggleOn = JSON.stringify({ label: labelOn, content: iconOn, cssClass: theme.on });
-        const dataToggleOff = JSON.stringify({ label: labelOff, content: iconOff, cssClass: theme.off });
 
         return (
             <i
-                ref={this.iconToggleRef}
                 className={iconToggleClassName}
                 role="button"
-                data-toggle-on={dataToggleOn}
-                data-toggle-off={dataToggleOff}
-                {...otherProps as any}
-            />
+                tabIndex={tabIndex}
+                {...this.buildEvents()}
+                {...this.buildAttributes()}
+                {...filterProps(otherProps)}
+            >
+                {text}
+            </i>
         );
     }
 }

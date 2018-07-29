@@ -89,7 +89,7 @@ describe("THCIconToogle component", () => {
         expect(toggle.getDOMNode().className.includes("my-class")).toBeTruthy();
     });
 
-    it.skip("Can be clicked", () => {
+    it("Can be clicked", () => {
         // Arrange
         const clickHandler = jest.fn();
         const toggle = mount(
@@ -118,7 +118,7 @@ describe("THCIconToogle component", () => {
         );
     });
 
-    it.skip("Can change value", () => {
+    it("Can change value", () => {
         // Arrange
         const toggle = mount(
             <THCIconToggle
