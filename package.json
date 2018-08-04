@@ -39,7 +39,7 @@
         "@storybook/addon-links": "4.0.0-alpha.15",
         "@storybook/addons": "4.0.0-alpha.15",
         "@storybook/react": "4.0.0-alpha.15",
-        "@types/enzyme": "3.1.12",
+        "@types/enzyme": "3.1.13",
         "@types/jest": "23.3.1",
         "@types/lodash": "4.14.116",
         "@types/material-components-web": "0.35.0",
