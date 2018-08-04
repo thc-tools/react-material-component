@@ -59,7 +59,7 @@
         "jest-environment-enzyme": "6.0.2",
         "jest-enzyme": "6.0.2",
         "lodash": "4.17.10",
-        "material-components-web": "0.37.1",
+        "material-components-web": "0.38.0",
         "material-design-icons": "3.0.1",
         "react": "16.4.2",
         "react-docgen-typescript-loader": "2.1.1",
@@ -72,7 +72,7 @@
     },
     "peerDependencies": {
         "lodash": "4.17.10",
-        "material-components-web": "0.37.1",
+        "material-components-web": "0.38.0",
         "react": "16.4.2",
         "react-dom": "16.4.2",
         "typescript": "2.9.2"
