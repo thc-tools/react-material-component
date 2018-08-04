@@ -68,14 +68,14 @@
         "standard-version": "4.4.0",
         "ts-jest": "23.0.1",
         "ts-loader": "4.4.2",
-        "typescript": "2.9.2"
+        "typescript": "3.0.1"
     },
     "peerDependencies": {
         "lodash": "4.17.10",
         "material-components-web": "0.37.1",
         "react": "16.4.2",
         "react-dom": "16.4.2",
-        "typescript": "2.9.2"
+        "typescript": "3.0.1"
     },
     "dependencies": {
         "@types/classnames": "2.2.6",
