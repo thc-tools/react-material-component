@@ -8,6 +8,12 @@ Implementation of Material Components Web for React
 [![devDependencies Status](https://david-dm.org/thc-tools/react-material-component/dev-status.svg)](https://david-dm.org/thc-tools/react-material-component?type=dev)
 [![peerDependencies Status](https://david-dm.org/thc-tools/react-material-component/peer-status.svg)](https://david-dm.org/thc-tools/react-material-component?type=peer)
 
+## Warning - This repository is archived
+
+Google have made it's official implementation for react, so don't need that work in progress anymore.
+
+see: https://github.com/material-components/material-components-web-react
+
 ## Documentation :
 
 Available at : https://thc-tools.github.io/react-material-component
